@@ -6,7 +6,6 @@ from pynever.strategies.parser.tokenizer import Token, Tokenizer
 from pynever.strategies.parser.tree import InfoNode, OperationNode, AssertionNode, ConstantNode, InputVariableNode, \
     OutputVariableNode
 from pynever.strategies.parser.util import Operation, Assertion
-from pynever.strategies.parser.visitor import Visitor
 from pynever.utilities import xor
 
 
@@ -97,7 +96,7 @@ class VnnlibParser:
         Returns
         -------
         tuple[torch.Tensor, torch.Tensor, list[torch.Tensor], list[torch.Tensor]]
-            The coefficient and bias matrices required to initialize a VNNLIB property
+            The input coefficients and biases and the lists of output coefficients and biases
         """
 
         # Step 1 - tokenizer
@@ -107,7 +106,8 @@ class VnnlibParser:
         nodes = self.parse_tokens(tokens)
 
         # Step 3 - visitor
-        return Visitor(self.input_len, self.output_len).visit(nodes)
+
+        pass
 
     def parse_tokens(self, tokens: list[Token]) -> list[InfoNode]:
         """

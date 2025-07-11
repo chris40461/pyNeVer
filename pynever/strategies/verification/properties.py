@@ -196,8 +196,8 @@ class VnnLibProperty(NeverProperty):
     """
 
     def __init__(self, filepath: str):
-        parser = vnnlib.VnnlibParser()
-        super().__init__(*parser.parse_property(filepath))
+        smt_parser = vnnlib.VnnlibParser()
+        super().__init__(*smt_parser.parse_property(filepath))
 
 
 class LocalRobustnessProperty(NeverProperty):
