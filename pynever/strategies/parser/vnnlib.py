@@ -3,8 +3,7 @@
 import torch
 
 from pynever.strategies.parser.tokenizer import Token, Tokenizer
-from pynever.strategies.parser.tree import InfoNode, OperationNode, AssertionNode, ConstantNode, InputVariableNode, \
-    OutputVariableNode
+from pynever.strategies.parser.tree import InfoNode, OperationNode, AssertionNode, ConstantNode
 from pynever.strategies.parser.util import Operation, Assertion
 from pynever.utilities import xor
 
@@ -411,7 +410,7 @@ class VnnlibParser:
                 token = self.safe_next()
 
             case _ if token.tag == Operation.IN or token.tag == Operation.OUT:
-                node = self.parse_var(token, input_flag)
+                node, input_flag = self.parse_var(token)
                 token = self.safe_next()
 
             case Operation.NUM:
@@ -432,69 +431,28 @@ class VnnlibParser:
 
         return node, token, input_flag
 
-    def parse_var(self, token: Token, input_flag: bool = True) -> InfoNode:
+    def parse_var(self, token: Token) -> tuple[InfoNode, bool]:
         """
-        Procedure to parse a variable from a constraint
 
         Parameters
         ----------
-        token: Token
-            The current token being parsed
-        input_flag: bool
-            Flag indicating if the variable refers to the input or the output
+        token
 
         Returns
         -------
-        InfoNode
-            The InfoNode corresponding to the variable
+
         """
-        if token.tag == Operation.IN:
-            if not input_flag:
-                raise SyntaxError(f'Mixed input and output variables at line {token.line}')
-
-            if int(token.value) >= self.input_len:
-                raise SyntaxError(f'Input variable number in assertion at line {token.line} '
-                                  f'exceeds the number of input variables ({self.input_len})')
-            node = InputVariableNode(int(token.value))
-
-        else:
-            if input_flag:
-                raise SyntaxError(f'Mixed input and output variables at line {token.line}')
-
-            if int(token.value) >= self.output_len:
-                raise SyntaxError(f'Output variable number in assertion at line {token.line} '
-                                  f'exceeds the number of output variables ({self.output_len})')
-
-            node = OutputVariableNode(int(token.value))
-
-        return node
+        pass
 
     def parse_const(self, token: Token) -> tuple[Token, float]:
         """
-        Procedure to parse a constant value from a constraint
 
         Parameters
         ----------
-        token: Token
-            The current token being parsed
+        token
 
         Returns
         -------
-        tuple[Token, float]
-            The new Token corresponding to the value and the numeric value
+
         """
-        numerator = float(token.value)
-        token = self.safe_next()
-
-        if token.tag == Operation.DIV:
-            # Get denominator
-            token = self.safe_next()
-
-            if token.tag != Operation.NUM:
-                raise SyntaxError(f'Expected numeric value after division at line {token.line}, '
-                                  f'found "{token.tag.value}" instead')
-
-            return self.safe_next(), numerator / float(token.value)
-
-        else:
-            return token, numerator
+        pass
