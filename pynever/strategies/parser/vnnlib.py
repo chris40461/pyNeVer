@@ -275,48 +275,16 @@ class VnnlibParser:
 
     def parse_and(self, token: Token) -> InfoNode:
         """
-        Procedure to parse an AND tree inside the output property.
 
         Parameters
         ----------
-        token: Token
-            The current token to parse
+        token
 
         Returns
         -------
-        InfoNode
-            The InfoNode tree representing the AND
+
         """
-        ops = []
-
-        if token.tag != Operation.AND:
-            raise SyntaxError(f'Expected "AND" at line {token.line}, found "{token.tag.value}" instead')
-
-        token = self.safe_next()
-
-        while True:
-            if token.tag != Operation.LP:
-                raise SyntaxError(f'Expected "(" at line {token.line}, found "{token.tag.value}" instead')
-
-            operation, _ = self.parse_operation(input_flag=False, root=False)
-            ops.append(operation)
-
-            # Loop until the closing parenthesis is found
-            token = self.safe_next()
-
-            if token.tag == Operation.RP:  # End of the AND statement
-                break
-            elif token.tag == Operation.LP:  # Another AND operand
-                continue
-            else:
-                raise SyntaxError(f'Expected "(" or ")" after AND statement at line {token.line}, '
-                                  f'found "{token.tag.value}" instead')
-
-        node = OperationNode(Operation.AND)
-        for op in ops:
-            node.add_child(op)
-
-        return node
+        pass
 
     def parse_constraint(self, token: Token, input_flag: bool = True) -> tuple[InfoNode, InfoNode, Token, bool]:
         """
